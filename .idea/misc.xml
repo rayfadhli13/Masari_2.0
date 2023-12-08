@@ -1,0 +1,14 @@
+<project version="4">
+  <component name="Black">
+    <option name="sdkName" value="Python 3.11 (chaquopy-matplotlib-master)" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (chaquopy-matplotlib-master)" project-jdk-type="Python SDK" />
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

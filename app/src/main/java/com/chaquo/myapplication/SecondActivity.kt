@@ -1,11 +1,8 @@
 package com.chaquo.myapplication
+
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -16,12 +13,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+
 class SecondActivity : AppCompatActivity() {
     private lateinit var listView: ListView
     private var selectedCity: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_second)
         val cities = mapOf(
             "Kuwait City" to Pair(-6, -8),
@@ -57,15 +55,25 @@ class SecondActivity : AppCompatActivity() {
             "Jaber Al Ali" to Pair(-8, -9)
         )
         listView = findViewById(R.id.listView)
-        val adapter = object : ArrayAdapter<String>(this, R.layout.list_item_city_checkbox, R.id.tvCityName, cities.keys.toList()) {
+        val adapter = object : ArrayAdapter<String>(
+            this,
+            R.layout.list_item_city_checkbox,
+            R.id.tvCityName,
+            cities.keys.toList()
+        ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = convertView ?: layoutInflater.inflate(R.layout.list_item_city_checkbox, parent, false)
+                val view = convertView ?: layoutInflater.inflate(
+                    R.layout.list_item_city_checkbox,
+                    parent,
+                    false
+                )
                 val cityName = getItem(position) ?: ""
                 val coordinates = cities[cityName]
                 val tvCityName = view.findViewById<TextView>(R.id.tvCityName)
                 tvCityName.text = cityName
                 val tvCoordinates = view.findViewById<TextView>(R.id.tvCoordinates)
-                tvCoordinates.text = "At Coordinates (${coordinates?.first}, ${coordinates?.second})"
+                tvCoordinates.text =
+                    "At Coordinates (${coordinates?.first}, ${coordinates?.second})"
                 val checkBoxCity = view.findViewById<CheckBox>(R.id.checkBoxCity)
                 checkBoxCity.isChecked = cityName == selectedCity
                 checkBoxCity.setOnClickListener {

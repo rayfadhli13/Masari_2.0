@@ -1,18 +1,20 @@
 package com.chaquo.myapplication
+
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import java.io.File
-import android.widget.Button
 import androidx.appcompat.app.AppCompatDelegate
+import java.io.File
+
 class FourthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fourth)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         val imageView = findViewById<ImageView>(R.id.imageView)
         val imagePath = intent.getStringExtra("IMAGE_PATH")
         if (imagePath != null) {

@@ -1,18 +1,15 @@
 package com.chaquo.myapplication
+
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.style.StyleSpan
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,11 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
-import android.widget.ProgressBar
-import kotlinx.coroutines.delay
+import java.util.Date
+import java.util.Locale
+
 class ThirdActivity : AppCompatActivity() {
     private val maxSelections = 15
     private lateinit var listViewCities: ListView
@@ -79,7 +75,11 @@ class ThirdActivity : AppCompatActivity() {
         } else {
             cities.filterKeys { it != selectedCityFromSecondActivity }
         }
-        val adapter = object : ArrayAdapter<String>(this, R.layout.list_item_city_checkbox, filteredCities.keys.toList()) {
+        val adapter = object : ArrayAdapter<String>(
+            this,
+            R.layout.list_item_city_checkbox,
+            filteredCities.keys.toList()
+        ) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: layoutInflater.inflate(
                     R.layout.list_item_city_checkbox, parent, false
@@ -89,7 +89,8 @@ class ThirdActivity : AppCompatActivity() {
                 tvCityName.text = cityName
                 val tvCoordinates = view.findViewById<TextView>(R.id.tvCoordinates)
                 val coordinates = filteredCities[cityName]
-                tvCoordinates.text = "At Coordinates (${coordinates?.first}, ${coordinates?.second})"
+                tvCoordinates.text =
+                    "At Coordinates (${coordinates?.first}, ${coordinates?.second})"
                 val checkBoxCity = view.findViewById<CheckBox>(R.id.checkBoxCity)
                 checkBoxCity.isChecked = selectedCities.contains(cityName)
                 fun toggleCitySelection(cityName: String, isSelected: Boolean) {
@@ -164,21 +165,21 @@ class ThirdActivity : AppCompatActivity() {
                 findViewById<TextView>(R.id.tvSelectedCity).text = "No starting city selected"
             }
             GlobalScope.launch(Dispatchers.IO) {
-                    val firstCoordX = sharedPref.getInt("SELECTED_COORD_X", 0)
-                    val firstCoordY = sharedPref.getInt("SELECTED_COORD_Y", 0)
-                    val combinedCoordinates = mutableListOf(Pair(firstCoordX, firstCoordY))
-                    val combinedNames = mutableListOf("\"$firstCityName\"")
-                    selectedCities.forEach { city ->
-                        cities[city]?.let { combinedCoordinates.add(it) }
-                        combinedNames.add("\"$city\"")
-                    }
-                    val fileContents =
-                        "c = ${combinedCoordinates.joinToString(separator = ", ")}\nN = ${
-                            combinedNames.joinToString(separator = ", ")
-                        }"
-                    openFileOutput("selected_cities.txt", Context.MODE_PRIVATE).use {
-                        it.write(fileContents.toByteArray())
-                    }
+                val firstCoordX = sharedPref.getInt("SELECTED_COORD_X", 0)
+                val firstCoordY = sharedPref.getInt("SELECTED_COORD_Y", 0)
+                val combinedCoordinates = mutableListOf(Pair(firstCoordX, firstCoordY))
+                val combinedNames = mutableListOf("\"$firstCityName\"")
+                selectedCities.forEach { city ->
+                    cities[city]?.let { combinedCoordinates.add(it) }
+                    combinedNames.add("\"$city\"")
+                }
+                val fileContents =
+                    "c = ${combinedCoordinates.joinToString(separator = ", ")}\nN = ${
+                        combinedNames.joinToString(separator = ", ")
+                    }"
+                openFileOutput("selected_cities.txt", Context.MODE_PRIVATE).use {
+                    it.write(fileContents.toByteArray())
+                }
                 try {
                     if (!Python.isStarted()) {
                         Python.start(AndroidPlatform(this@ThirdActivity))
@@ -187,7 +188,8 @@ class ThirdActivity : AppCompatActivity() {
                     val pyObject = py.getModule("plot_cities1")
                     val fileDir = filesDir.absolutePath
                     val dataFilePath = "$fileDir/selected_cities.txt"
-                    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+                    val timeStamp =
+                        SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
                     val outputImagePath = "$fileDir/output_image_$timeStamp.png"
                     val result = pyObject.callAttr(
                         "generate_plot_and_save",
@@ -204,7 +206,11 @@ class ThirdActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE  // Hide the progress bar
-                        Toast.makeText(this@ThirdActivity, "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            this@ThirdActivity,
+                            "An error occurred: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }

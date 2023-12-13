@@ -2,65 +2,86 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#FFFFFF">
+    android:padding="16dp">
+
     <TextView
         android:id="@+id/textView_appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:text="Nice!👌"
-        android:textStyle="bold"
-        android:textSize="25sp"
-        android:textColor="#000000" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/american_typewriter"
+        android:text="MASARI adapts your preferences\nmaking every stop an adventure"
+        android:textColor="#000000"
+        android:textSize="21sp" />
+
     <TextView
         android:id="@+id/tvSelectedCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="30dp"
-        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/american_typewriter"
         android:text="Select your destinations\nNote: order is not important "
         android:textColor="#000000"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:textSize="21sp" />
+
     <ListView
         android:id="@+id/listViewCities"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:choiceMode="multipleChoice"
         android:divider="@null"
-        android:layout_marginBottom="30dp"
-        android:dividerHeight="0dp"
-        android:choiceMode="multipleChoice"/>
+        android:dividerHeight="0dp" />
+
+    <TextView
+        android:id="@+id/more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/american_typewriter"
+        android:padding="8dp"
+        android:singleLine="true"
+        android:text="..."
+        android:textAlignment="center"
+        android:textColor="#e06c44"
+        android:textSize="30sp" />
+
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="40dp">
+
         <Button
             android:id="@+id/btnConfirmSelection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="View Map"
-            android:background="@drawable/rounded_background"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="0dp"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
+            android:background="@drawable/rounded_background"
+            android:fontFamily="@font/american_typewriter"
             android:padding="5dp"
-            android:textAllCaps="false" />
+            android:text="Launch your journey"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
         <ProgressBar
             android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/btnConfirmSelection"
-            style="?android:attr/progressBarStyleHorizontal"
             android:max="100"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 </LinearLayout>

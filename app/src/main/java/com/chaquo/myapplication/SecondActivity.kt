@@ -49,7 +49,6 @@ class SecondActivity : AppCompatActivity() {
             "Abu Al-Hasaniya" to Pair(-8, -3),
             "Al-Naeem" to Pair(9, 6),
             "Al-Adan" to Pair(5, 4),
-            "Qurain" to Pair(-4, -6),
             "Aswaq Al-Qurain" to Pair(0, 0),
             "Al-Fineates" to Pair(3, -8),
             "Jaber Al-Ali" to Pair(-8, -8)

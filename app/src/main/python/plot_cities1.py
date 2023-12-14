@@ -62,36 +62,44 @@ def calcPath(Order, C):
 def generate_plot_and_save(file_path, output_path):
     try:
         C, N = read_data_from_file(file_path)
-        plt.figure(figsize=(10, 10))
-        if len(C) <= 2:
-            Order = list(range(len(C))) + [0]
-            distanceBefore = calcPath(Order, C)
-            plotCitiesAndPath(C, N, Order)
+        plt.figure(figsize=(10, 8))
+
+        MaxITR = 100
+        distanceBefore = float('inf')
+
+        # Initialize best_path with a default value: start and return to the first city
+        best_path = [0, 0]
+
+        # Parameters for the genetic algorithm
+        population_size = 100
+        tournament_size = min(10, len(C))
+        crossover_rate = 0.8
+        mutation_rate = 0.1
+        num_generations = 100
+
+        if len(C) == 2:
+            # If there are only two cities, the path is direct and simple
+            best_path = [0, 1, 0]
+            distanceBefore = calcPath(best_path, C)
         else:
-            MaxITR = 100
-            distanceBefore = float('inf')
-            population_size = 100
-            tournament_size = min(10, len(C))
-            crossover_rate = 0.8
-            mutation_rate = 0.1
-            num_generations = 100
             for _ in range(MaxITR):
-                if len(C) > 1:
-                    Order = [0] + random.sample(range(1, len(C)), len(C) - 1)
-                else:
-                    Order = list(range(len(C)))
+                Order = [0] + random.sample(range(1, len(C)), len(C) - 1) + [0]
                 distance = calcPath(Order, C)
+
                 if distance < distanceBefore:
                     distanceBefore = distance
-            best_path, convergence_data = genetic_algorithm(C, population_size, tournament_size, crossover_rate, mutation_rate, num_generations)
-            print(f"Best Path: {best_path[0]}")
-            print(f"Best Distance: {best_path[1]}")
-            Order = best_path[0] + [0]
-            plotCitiesAndPath(C, N, Order)
+                    best_path = Order
+
+            if len(C) > 2:
+                genetic_best_path, convergence_data = genetic_algorithm(C, population_size, tournament_size, crossover_rate, mutation_rate, num_generations)
+                if genetic_best_path[1] < distanceBefore:
+                    best_path = [0] + genetic_best_path[0][1:] + [0]
+
+        plotCitiesAndPath(C, N, best_path)
         plt.savefig(output_path)
-        print("Prepare the best path and total distance as a string")
-        best_path_cities = [N[i] for i in Order]
-        distanceNow = calcPath(Order, C)
+
+        best_path_cities = [N[i] for i in best_path]
+        distanceNow = calcPath(best_path, C)
         best_path_str = f"{best_path_cities}\n"
         distance_before_str = f"{distanceBefore:.2f}"
         best_distance_str = f"{distanceNow:.2f}"
@@ -100,6 +108,7 @@ def generate_plot_and_save(file_path, output_path):
     except Exception as e:
         print(e)
         raise e
+
     return best_path_str, distance_before_str, best_distance_str
 def generate_population(cities, population_size):
     population = []

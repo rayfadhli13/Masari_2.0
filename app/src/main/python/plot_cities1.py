@@ -3,6 +3,9 @@ import ast
 import matplotlib.pyplot as plt
 from scipy.interpolate import make_interp_spline
 import numpy as np
+from scipy.interpolate import interp1d
+from matplotlib.path import Path
+import matplotlib.patches as patches
 def read_data_from_file(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -13,40 +16,41 @@ def read_data_from_file(file_path):
     except SyntaxError as e:
         print("Syntax error in data file:", e)
         return [], []
+
+
+def bezier_curve(p1, p2, control_scale=0.5):
+    t = np.linspace(0, 1, 100)
+    midpoint_x = (p1[0] + p2[0]) / 2
+    vertical_offset = control_scale * abs(p1[1] - p2[1]) / 2
+    control_point = [midpoint_x, (p1[1] + p2[1]) / 2 - vertical_offset]
+    curve = (1 - t)[:, None]**2 * p1 + 2 * (1 - t)[:, None] * t[:, None] * control_point + t[:, None]**2 * p2
+    return curve
+
+
 def plotCitiesAndPath(C, N, Order):
     print("Start of plotCitiesAndPath function call")
     maxVal = max([max(abs(x), abs(y)) for x, y in C])
-    print("Plot Cities")
-    plt.figure()
-    print("Prepare data for the path")
-    x_path = [C[i][0] for i in Order] + [C[Order[0]][0]]
-    y_path = [C[i][1] for i in Order] + [C[Order[0]][1]]
-    print("Interpolate to create a smooth path")
-    if len(x_path) > 1 and len(y_path) > 1:
-        path_points = 200
-        t = np.linspace(0, 1, len(x_path))
-        t_new = np.linspace(0, 1, path_points)
-        spline_x = make_interp_spline(t, x_path, k=2)
-        spline_y = make_interp_spline(t, y_path, k=2)
-        x_smooth = spline_x(t_new)
-        y_smooth = spline_y(t_new)
-    else:
-        x_smooth, y_smooth = x_path, y_path
-    print("Plot the path")
-    plt.plot(x_smooth, y_smooth, 'b', linestyle='-')
-    print("Set plot limits and grid")
+    plt.figure(figsize=(9, 9))  # Smaller figure size
+
+    for i in range(len(Order) - 1):
+        p1 = np.array(C[Order[i]])
+        p2 = np.array(C[Order[i + 1]])
+        curve = bezier_curve(p1, p2)
+        plt.plot(curve[:, 0], curve[:, 1], 'b', linestyle='-')
+
     plt.xlim(-maxVal - 1, maxVal + 1)
     plt.ylim(-maxVal - 1, maxVal + 1)
     plt.grid(True)
-    plt.xticks(range(-maxVal - 1, maxVal + 1, 1))
-    plt.yticks(range(-maxVal - 1, maxVal + 1, 1))
+    plt.xticks(np.arange(-maxVal - 1, maxVal + 1, 1))
+    plt.yticks(np.arange(-maxVal - 1, maxVal + 1, 1))
+
     for i, (x, y) in enumerate(C):
-        if i == 0:
-            plt.plot(x, y, 'go', markersize=10)  # Mark the first city with a green circle
-        else:
-            plt.plot(x, y, 'ro', markersize=8)  # Plot other cities as red circles
-        plt.text(x, y, N[i], fontsize=14, ha='right', va='bottom')  # Label cities
+        marker_style = 'go' if i == 0 else 'ro'
+        plt.plot(x, y, marker_style, markersize=10)
+        plt.text(x, y, N[i], fontsize=14, ha='right', va='bottom')
+
     print("End plotCitiesAndPath function call")
+
 def calcPath(Order, C):
     if len(Order) < 2:
         return 0
@@ -88,13 +92,15 @@ def generate_plot_and_save(file_path, output_path):
         print("Prepare the best path and total distance as a string")
         best_path_cities = [N[i] for i in Order]
         distanceNow = calcPath(Order, C)
-        result_str = f"Distance Before: {distanceBefore:.2f}\nDistance Now: {distanceNow:.2f}\nBest Path: {best_path_cities}"
-        print(result_str)
+        best_path_str = f"{best_path_cities}\n"
+        distance_before_str = f"{distanceBefore:.2f}"
+        best_distance_str = f"{distanceNow:.2f}"
+
         print(f"End of generate_plot_and_save function call file path [{file_path}], output path [{output_path}]")
     except Exception as e:
         print(e)
         raise e
-    return result_str
+    return best_path_str, distance_before_str, best_distance_str
 def generate_population(cities, population_size):
     population = []
     num_cities = len(cities)

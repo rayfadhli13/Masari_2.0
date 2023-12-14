@@ -39,36 +39,36 @@ class ThirdActivity : AppCompatActivity() {
         val selectedCityFromSecondActivity = sharedPref.getString("SELECTED_CITY_NAME", "")
         val cities = mapOf(
             "Kuwait City" to Pair(-6, -8),
-            "Al Ahmadi" to Pair(-2, -7),
+            "Al-Ahmadi" to Pair(-2, -7),
             "Hawalli" to Pair(-3, -4),
-            "Al Farwaniyah" to Pair(-5, 7),
-            "Al Jahra" to Pair(-2, 3),
+            "Al-Farwaniyah" to Pair(-5, 7),
+            "Al-Jahra" to Pair(-2, 3),
             "Mubarak Al-Kabeer" to Pair(-1, 9),
-            "Al Mahboula" to Pair(9, -1),
-            "Sabah Al Salem" to Pair(7, 2),
-            "Al Fintas" to Pair(-3, -7),
-            "Al Fahaheel" to Pair(-1, -2),
-            "Al Riqqah" to Pair(-4, 4),
+            "Al-Mahboula" to Pair(9, -1),
+            "Sabah Al-Salem" to Pair(7, 2),
+            "Al-Fintas" to Pair(-3, -7),
+            "Al-Fahaheel" to Pair(-1, -2),
+            "Al-Riqqah" to Pair(-4, 4),
             "Salwa" to Pair(-8, 9),
-            "Al Manqaf" to Pair(4, -1),
-            "Al Dasmah" to Pair(-4, 6),
-            "Al Salmiyah" to Pair(2, 1),
+            "Al-Manqaf" to Pair(4, -1),
+            "Al-Dasmah" to Pair(-4, 6),
+            "Al-Salmiyah" to Pair(2, 1),
             "Shaab" to Pair(6, -5),
-            "Al Wafrah" to Pair(-2, -3),
+            "Al-Wafrah" to Pair(-2, -3),
             "Kabd" to Pair(1, 6),
             "Abraq Khaitan" to Pair(-9, 2),
-            "Al Arthieya" to Pair(-2, 2),
-            "Al Shamiya" to Pair(7, -5),
-            "Al Shuwaikh" to Pair(-3, 3),
-            "Al Sulaibikhat" to Pair(7, -6),
-            "Al Zour" to Pair(4, 3),
-            "Abu Al Hasaniya" to Pair(-8, -3),
-            "Al Naeem" to Pair(9, 6),
-            "Al Adan" to Pair(5, 4),
+            "Al-Arthieya" to Pair(-2, 2),
+            "Al-Shamiya" to Pair(7, -5),
+            "Al-Shuwaikh" to Pair(-3, 3),
+            "Al-Sulaibikhat" to Pair(7, -6),
+            "Al-Zour" to Pair(4, 3),
+            "Abu Al-Hasaniya" to Pair(-8, -3),
+            "Al-Naeem" to Pair(9, 6),
+            "Al-Adan" to Pair(5, 4),
             "Qurain" to Pair(-4, -6),
-            "Aswaq Al Qurain" to Pair(0, 0),
-            "Al Fineates" to Pair(3, -9),
-            "Jaber Al Ali" to Pair(-8, -9)
+            "Aswaq Al-Qurain" to Pair(0, 0),
+            "Al-Fineates" to Pair(3, -9),
+            "Jaber Al-Ali" to Pair(-8, -9)
         )
         val filteredCities = if (selectedCityFromSecondActivity.isNullOrEmpty()) {
             cities
@@ -191,21 +191,27 @@ class ThirdActivity : AppCompatActivity() {
                     val timeStamp =
                         SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
                     val outputImagePath = "$fileDir/output_image_$timeStamp.png"
-                    val result = pyObject.callAttr(
+                    val results = pyObject.callAttr(
                         "generate_plot_and_save",
                         dataFilePath,
                         outputImagePath
-                    ).toString()
+                    ).asList()
+
+                    val bestPathText = results[0].toString()
+                    val distanceBeforeText = results[1].toString()
+                    val bestDistanceText = results[2].toString()
                     withContext(Dispatchers.Main) {
                         val intent = Intent(this@ThirdActivity, FourthActivity::class.java).apply {
                             putExtra("IMAGE_PATH", outputImagePath)
-                            putExtra("RESULT_TEXT", result)
+                            putExtra("BEST_PATH_TEXT", bestPathText)
+                            putExtra("DISTANCE_BEFORE_TEXT", distanceBeforeText)
+                            putExtra("BEST_DISTANCE_TEXT", bestDistanceText)
                         }
                         startActivity(intent)
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        progressBar.visibility = View.GONE  // Hide the progress bar
+                        progressBar.visibility = View.GONE
                         Toast.makeText(
                             this@ThirdActivity,
                             "An error occurred: ${e.message}",

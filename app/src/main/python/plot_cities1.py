@@ -64,12 +64,6 @@ def generate_plot_and_save(file_path, output_path):
         C, N = read_data_from_file(file_path)
         plt.figure(figsize=(10, 8))
 
-        MaxITR = 100
-        distanceBefore = float('inf')
-
-        # Initialize best_path with a default value: start and return to the first city
-        best_path = [0, 0]
-
         # Parameters for the genetic algorithm
         population_size = 100
         tournament_size = min(10, len(C))
@@ -77,22 +71,22 @@ def generate_plot_and_save(file_path, output_path):
         mutation_rate = 0.1
         num_generations = 100
 
+        # Initialize the best path
+        best_path = [0, 0] if len(C) > 1 else [0]
+
         if len(C) == 2:
+            # Direct path calculation for two cities
             best_path = [0, 1, 0]
             distanceBefore = calcPath(best_path, C)
-        else:
-            for _ in range(MaxITR):
-                Order = [0] + random.sample(range(1, len(C)), len(C) - 1) + [0]
-                distance = calcPath(Order, C)
+        elif len(C) > 2:
+            # Generate initial population
+            initial_population = generate_population(C, population_size)
+            # Get the worst distance from the initial population
+            distanceBefore = max(initial_population, key=lambda x: x[1])[1]
 
-                if distance < distanceBefore:
-                    distanceBefore = distance
-                    best_path = Order
-
-            if len(C) > 2:
-                genetic_best_path, convergence_data = genetic_algorithm(C, population_size, tournament_size, crossover_rate, mutation_rate, num_generations)
-                if genetic_best_path[1] < distanceBefore:
-                    best_path = [0] + genetic_best_path[0][1:] + [0]
+            # Run genetic algorithm
+            genetic_best_path, convergence_data = genetic_algorithm(C, population_size, tournament_size, crossover_rate, mutation_rate, num_generations)
+            best_path = [0] + genetic_best_path[0][1:] + [0]
 
         # Check and remove duplicate city at the end if necessary
         if len(best_path) > 1 and best_path[-1] == best_path[-2]:

@@ -78,7 +78,6 @@ def generate_plot_and_save(file_path, output_path):
         num_generations = 100
 
         if len(C) == 2:
-            # If there are only two cities, the path is direct and simple
             best_path = [0, 1, 0]
             distanceBefore = calcPath(best_path, C)
         else:
@@ -95,6 +94,10 @@ def generate_plot_and_save(file_path, output_path):
                 if genetic_best_path[1] < distanceBefore:
                     best_path = [0] + genetic_best_path[0][1:] + [0]
 
+        # Check and remove duplicate city at the end if necessary
+        if len(best_path) > 1 and best_path[-1] == best_path[-2]:
+            best_path.pop()
+
         plotCitiesAndPath(C, N, best_path)
         plt.savefig(output_path)
 
@@ -110,6 +113,7 @@ def generate_plot_and_save(file_path, output_path):
         raise e
 
     return best_path_str, distance_before_str, best_distance_str
+
 def generate_population(cities, population_size):
     population = []
     num_cities = len(cities)

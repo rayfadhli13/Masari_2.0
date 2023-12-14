@@ -43,13 +43,13 @@ class ThirdActivity : AppCompatActivity() {
             "Hawalli" to Pair(-3, -4),
             "Al-Farwaniyah" to Pair(-5, 7),
             "Al-Jahra" to Pair(-2, 3),
-            "Mubarak Al-Kabeer" to Pair(-1, 9),
+            "Mubarak Al-Kabeer" to Pair(-1, 8),
             "Al-Mahboula" to Pair(9, -1),
             "Sabah Al-Salem" to Pair(7, 2),
             "Al-Fintas" to Pair(-3, -7),
             "Al-Fahaheel" to Pair(-1, -2),
             "Al-Riqqah" to Pair(-4, 4),
-            "Salwa" to Pair(-8, 9),
+            "Salwa" to Pair(-8, 8),
             "Al-Manqaf" to Pair(4, -1),
             "Al-Dasmah" to Pair(-4, 6),
             "Al-Salmiyah" to Pair(2, 1),
@@ -67,8 +67,8 @@ class ThirdActivity : AppCompatActivity() {
             "Al-Adan" to Pair(5, 4),
             "Qurain" to Pair(-4, -6),
             "Aswaq Al-Qurain" to Pair(0, 0),
-            "Al-Fineates" to Pair(3, -9),
-            "Jaber Al-Ali" to Pair(-8, -9)
+            "Al-Fineates" to Pair(3, -8),
+            "Jaber Al-Ali" to Pair(-8, -8)
         )
         val filteredCities = if (selectedCityFromSecondActivity.isNullOrEmpty()) {
             cities

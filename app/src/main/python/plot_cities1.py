@@ -30,7 +30,7 @@ def bezier_curve(p1, p2, control_scale=0.5):
 def plotCitiesAndPath(C, N, Order):
     print("Start of plotCitiesAndPath function call")
     maxVal = max([max(abs(x), abs(y)) for x, y in C])
-    plt.figure(figsize=(9, 9))  # Smaller figure size
+    plt.figure(figsize=(10, 8))  # Smaller figure size
 
     for i in range(len(Order) - 1):
         p1 = np.array(C[Order[i]])

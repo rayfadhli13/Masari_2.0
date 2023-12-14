@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">TSP App</string>
+    <string name="app_name">Masari</string>
     <string name="image_description">Image description</string>
-    <string name="hello_there">Hello There👋</string>
 </resources>

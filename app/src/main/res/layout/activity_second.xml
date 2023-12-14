@@ -43,25 +43,25 @@
         android:ellipsize="end"
         android:fontFamily="@font/american_typewriter"
         android:padding="8dp"
-        android:layout_above="@id/button_continue"
+        android:layout_above="@id/button_next"
         android:singleLine="true"
         android:text="..."
         android:textAlignment="center"
         android:textColor="#e06c44"
         android:textSize="30sp" />
     <Button
-        android:id="@+id/button_continue"
+        android:id="@+id/button_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:fontFamily="@font/american_typewriter"
-        android:text="Continue"
-        android:background="@drawable/rounded_background"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="40dp"
-        android:textColor="#FFFFFF"
-        android:textSize="21sp"
+        android:background="@drawable/rounded_background"
         android:padding="5dp"
-        android:textAllCaps="false" />
+        android:fontFamily="@font/american_typewriter"
+        android:text="Continue"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="21sp" />
 </RelativeLayout>

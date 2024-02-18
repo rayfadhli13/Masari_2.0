@@ -1,6 +1,7 @@
 import random
 import ast
 import matplotlib.pyplot as plt
+from matplotlib.patches import FancyArrowPatch
 from scipy.interpolate import make_interp_spline
 import numpy as np
 from scipy.interpolate import interp1d
@@ -18,38 +19,52 @@ def read_data_from_file(file_path):
         return [], []
 
 
-def bezier_curve(p1, p2, control_scale=0.5):
-    t = np.linspace(0, 1, 100)
-    midpoint_x = (p1[0] + p2[0]) / 2
-    vertical_offset = control_scale * abs(p1[1] - p2[1]) / 2
-    control_point = [midpoint_x, (p1[1] + p2[1]) / 2 - vertical_offset]
-    curve = (1 - t)[:, None]**2 * p1 + 2 * (1 - t)[:, None] * t[:, None] * control_point + t[:, None]**2 * p2
-    return curve
+def draw_arrow_between_points(start, end, ax, zorder=2):
+    """
+    Draw a straight arrow between two points with adjusted properties for visibility.
+    """
+    arrowstyle = "-|>"  # Arrow style
+    lw = 1.5  # Line width
+    mutation_scale = 20  # Size of the arrow head
+
+    # Create an arrow patch and add it to the axes with a specific zorder
+    arrow = FancyArrowPatch(posA=start, posB=end, arrowstyle=arrowstyle,
+                            mutation_scale=mutation_scale, lw=lw, color="b",
+                            connectionstyle="arc3,rad=0.1", zorder=zorder)
+    ax.add_patch(arrow)
 
 
 def plotCitiesAndPath(C, N, Order):
     print("Start of plotCitiesAndPath function call")
-    maxVal = max([max(abs(x), abs(y)) for x, y in C])
-    plt.figure(figsize=(10, 8))  # Smaller figure size
+    fig, ax = plt.subplots(figsize=(10, 8))
 
-    for i in range(len(Order) - 1):
-        p1 = np.array(C[Order[i]])
-        p2 = np.array(C[Order[i + 1]])
-        curve = bezier_curve(p1, p2)
-        plt.plot(curve[:, 0], curve[:, 1], 'b', linestyle='-')
-
-    plt.xlim(-maxVal - 1, maxVal + 1)
-    plt.ylim(-maxVal - 1, maxVal + 1)
-    plt.grid(True)
-    plt.xticks(np.arange(-maxVal - 1, maxVal + 1, 1))
-    plt.yticks(np.arange(-maxVal - 1, maxVal + 1, 1))
-
+    # Plot the cities
     for i, (x, y) in enumerate(C):
-        marker_style = 'go' if i == 0 else 'ro'
-        plt.plot(x, y, marker_style, markersize=10)
-        plt.text(x, y, N[i], fontsize=14, ha='right', va='bottom')
+        if i == 0:
+            ax.plot(x, y, 'go', markersize=10, zorder=3)  # Mark the first city with a green circle
+        else:
+            ax.plot(x, y, 'ro', markersize=8, zorder=3)  # Plot other cities as red circles
+        ax.text(x, y, N[i], fontsize=14, ha='right', va='bottom', zorder=3)  # Label cities
 
-    print("End plotCitiesAndPath function call")
+    # Draw arrows between cities based on the order
+    for i in range(len(Order) - 1):
+        start_point = np.array(C[Order[i]])
+        end_point = np.array(C[Order[i + 1]])
+        draw_arrow_between_points(start_point, end_point, ax, zorder=2)
+
+    # Optionally, draw an arrow from the last to the first city to complete the loop
+    draw_arrow_between_points(np.array(C[Order[-1]]), np.array(C[Order[0]]), ax, zorder=2)
+
+    # Adjust plot limits and enable grid
+    maxVal = max(max(abs(x), abs(y)) for x, y in C)
+    ax.set_xlim(-maxVal - 1, maxVal + 1)
+    ax.set_ylim(-maxVal - 1, maxVal + 1)
+    ax.grid(True, zorder=0)  # Ensure grid is below other elements
+    plt.xticks(range(-maxVal - 1, maxVal + 1, 1))
+    plt.yticks(range(-maxVal - 1, maxVal + 1, 1))
+
+    print("End of plotCitiesAndPath function call")
+
 
 def calcPath(Order, C):
     if len(Order) < 2:
@@ -62,10 +77,10 @@ def calcPath(Order, C):
 def generate_plot_and_save(file_path, output_path):
     try:
         C, N = read_data_from_file(file_path)
-        plt.figure(figsize=(10, 8))
+        plt.figure(figsize=(10, 10))
 
         # Parameters for the genetic algorithm
-        population_size = 100
+        population_size = 300
         tournament_size = min(10, len(C))
         crossover_rate = 0.8
         mutation_rate = 0.1

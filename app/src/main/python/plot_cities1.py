@@ -30,7 +30,7 @@ def draw_arrow_between_points(start, end, ax, zorder=2):
     # Create an arrow patch and add it to the axes with a specific zorder
     arrow = FancyArrowPatch(posA=start, posB=end, arrowstyle=arrowstyle,
                             mutation_scale=mutation_scale, lw=lw, color="b",
-                            connectionstyle="arc3,rad=0.1", zorder=zorder)
+                            connectionstyle="arc3,rad=0.0", zorder=zorder)
     ax.add_patch(arrow)
 
 

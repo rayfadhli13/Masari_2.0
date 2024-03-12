@@ -16,6 +16,9 @@
         <activity android:name=".SecondActivity"
             android:screenOrientation="portrait"
             android:exported="false"/>
+        <activity android:name=".StateActivity"
+            android:screenOrientation="portrait"
+            android:exported="false"/>
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">

@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val buttonNext = findViewById<Button>(R.id.button_next)
         buttonNext.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
+            val intent = Intent(this, StateActivity::class.java)
             startActivity(intent)
         }
     }

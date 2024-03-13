@@ -1,5 +1,4 @@
 package com.chaquo.myapplication
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -17,43 +16,14 @@ import androidx.appcompat.app.AppCompatDelegate
 class SecondActivity : AppCompatActivity() {
     private lateinit var listView: ListView
     private var selectedCity: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_second)
-        val cities = mapOf(
-            "Kabd" to Pair(0, -2),
-            "Abraq Khaitan" to Pair(3, -3),
-            "Al-Arthieya" to Pair(5, -2),
-            "Al-Shamiya" to Pair(-6, -5),
-            "Al-Shuwaikh" to Pair(-2, -3),
-            "Al-Sulaibikhat" to Pair(1, -5),
-            "Al-Zour" to Pair(4, -6),
-            "Abu Al-Hasaniya" to Pair(6, -5),
-            "Al-Naeem" to Pair(-7, -8),
-            "Mubarak Al-Kabeer" to Pair(-5, 4),
-            "Al-Mahboula" to Pair(-2, 3),
-            "Sabah Al-Salem" to Pair(1, 4),
-            "Al-Fintas" to Pair(3, 3),
-            "Al-Fahaheel" to Pair(5, 4),
-            "Al-Riqqah" to Pair(-4, 1),
-            "Salwa" to Pair(-1, 0),
-            "Al-Manqaf" to Pair(2, 1),
-            "Kuwait City" to Pair(-6, 7),
-            "Al-Ahmadi" to Pair(-3, 6),
-            "Hawalli" to Pair(2, 7),
-            "Al-Farwaniyah" to Pair(4, 6),
-            "Al-Jahra" to Pair(6, 7),
-            "Al-Dasmah" to Pair(4, 0),
-            "Al-Salmiyah" to Pair(6, 1),
-            "Shaab" to Pair(-6, 0),
-            "Al-Wafrah" to Pair(-4, -1),
-            "Al-Adan" to Pair(-4, -7),
-            "Aswaq Al-Qurain" to Pair(0, -8),
-            "Al-Fineates" to Pair(3, -7),
-            "Jaber Al-Ali" to Pair(6, -8)
-        )
 
+        val selectedStateName = intent.getStringExtra("SELECTED_STATE_NAME")
+        val cities = getCitiesForState(selectedStateName ?: "")
 
         listView = findViewById(R.id.listView)
         val adapter = object : ArrayAdapter<String>(
@@ -69,12 +39,11 @@ class SecondActivity : AppCompatActivity() {
                     false
                 )
                 val cityName = getItem(position) ?: ""
-                val coordinates = cities[cityName]
+                val coordinates = cities[cityName]!!
                 val tvCityName = view.findViewById<TextView>(R.id.tvCityName)
                 tvCityName.text = cityName
                 val tvCoordinates = view.findViewById<TextView>(R.id.tvCoordinates)
-                tvCoordinates.text =
-                    "At Coordinates (${coordinates?.first}, ${coordinates?.second})"
+                tvCoordinates.text = "At Coordinates (${coordinates.first}, ${coordinates.second})"
                 val checkBoxCity = view.findViewById<CheckBox>(R.id.checkBoxCity)
                 checkBoxCity.isChecked = cityName == selectedCity
                 checkBoxCity.setOnClickListener {
@@ -82,9 +51,7 @@ class SecondActivity : AppCompatActivity() {
                     notifyDataSetChanged()
                     listView.setItemChecked(position, checkBoxCity.isChecked)
                 }
-                view.setOnClickListener {
-                    checkBoxCity.performClick()
-                }
+                view.setOnClickListener { checkBoxCity.performClick() }
                 return view
             }
         }
@@ -97,12 +64,13 @@ class SecondActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
             listView.setItemChecked(position, selectedCity != null)
         }
+
         val continueButton = findViewById<Button>(R.id.button_next)
         continueButton.setOnClickListener {
             if (selectedCity == null) {
                 Toast.makeText(this, "Please select a city to continue.", Toast.LENGTH_SHORT).show()
             } else {
-                val coordinates = cities[selectedCity] ?: Pair(0, 0)
+                val coordinates = cities[selectedCity]!!
                 val sharedPref = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
                 with(sharedPref.edit()) {
                     putString("SELECTED_CITY_NAME", selectedCity)
@@ -113,6 +81,31 @@ class SecondActivity : AppCompatActivity() {
                 val intent = Intent(this, ThirdActivity::class.java)
                 startActivity(intent)
             }
+        }
+    }
+
+    private fun getCitiesForState(state: String): Map<String, Pair<Int, Int>> {
+        // Define maps of cities for each state
+        val state1Cities = mapOf(
+            "Kabd" to Pair(0, -2),
+            "Abraq Khaitan" to Pair(3, -3),
+            "Al-Arthieya" to Pair(5, -2)
+            // Add more cities that belong to State1
+        )
+        val state2Cities = mapOf(
+            "Al-Shamiya" to Pair(-6, -5),
+            "Al-Shuwaikh" to Pair(-2, -3),
+            "Al-Sulaibikhat" to Pair(1, -5)
+            // Add more cities that belong to State2
+        )
+        // Add more states and their cities as needed
+
+        // Return the map of cities based on the selected state
+        return when (state) {
+            "State1" -> state1Cities
+            "State2" -> state2Cities
+            // Add more cases for additional states
+            else -> emptyMap() // Return an empty map if the state is not recognized
         }
     }
 }

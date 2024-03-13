@@ -79,6 +79,17 @@ class SecondActivity : AppCompatActivity() {
                     apply()
                 }
                 val intent = Intent(this, ThirdActivity::class.java)
+
+// Assuming 'cities' is a Map<String, Pair<Int, Int>>
+                val filteredCities = cities.filterKeys { it != selectedCity }
+                val cityNames = filteredCities.keys.toTypedArray()
+                val coordX = filteredCities.values.map { it.first }.toIntArray()
+                val coordY = filteredCities.values.map { it.second }.toIntArray()
+
+                intent.putExtra("cityNames", cityNames)
+                intent.putExtra("coordX", coordX)
+                intent.putExtra("coordY", coordY)
+
                 startActivity(intent)
             }
         }

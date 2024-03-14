@@ -37,6 +37,11 @@ def draw_arrow_between_points(start, end, ax, zorder=2):
 def plotCitiesAndPath(C, N, Order):
     print("Start of plotCitiesAndPath function call")
     fig, ax = plt.subplots(figsize=(10, 8))
+    ax.axis('off')
+
+    # Remove the ticks (the numbers on the axis)
+    ax.set_xticks([])
+    ax.set_yticks([])
 
     # Plot the cities
     for i, (x, y) in enumerate(C):
@@ -44,7 +49,6 @@ def plotCitiesAndPath(C, N, Order):
             ax.plot(x, y, 'go', markersize=10, zorder=3)  # Mark the first city with a green circle
         else:
             ax.plot(x, y, 'ro', markersize=8, zorder=3)  # Plot other cities as red circles
-        ax.text(x, y, N[i], fontsize=14, ha='right', va='bottom', zorder=3)  # Label cities
 
     # Draw arrows between cities based on the order
     for i in range(len(Order) - 1):
@@ -59,9 +63,7 @@ def plotCitiesAndPath(C, N, Order):
     maxVal = max(max(abs(x), abs(y)) for x, y in C)
     ax.set_xlim(-maxVal - 1, maxVal + 1)
     ax.set_ylim(-maxVal - 1, maxVal + 1)
-    ax.grid(True, zorder=0)  # Ensure grid is below other elements
-    plt.xticks(range(-maxVal - 1, maxVal + 1, 1))
-    plt.yticks(range(-maxVal - 1, maxVal + 1, 1))
+
 
     print("End of plotCitiesAndPath function call")
 
@@ -108,7 +110,8 @@ def generate_plot_and_save(file_path, output_path):
             best_path.pop()
 
         plotCitiesAndPath(C, N, best_path)
-        plt.savefig(output_path)
+        plt.savefig(output_path, transparent=True)
+
 
         best_path_cities = [N[i] for i in best_path]
         distanceNow = calcPath(best_path, C)

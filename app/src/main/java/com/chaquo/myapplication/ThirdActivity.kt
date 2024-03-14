@@ -33,11 +33,15 @@ class ThirdActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private val selectedCities = mutableListOf<String>()
     private lateinit var cities: Map<String, Pair<Int, Int>>
+    private lateinit var selectedStateName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        selectedStateName = intent.getStringExtra("SELECTED_STATE_NAME") ?: "DefaultState"
+
+        Log.d("MyActivity", "Using state name: $selectedStateName")
 
         initializeViews()
         loadDataFromIntent()
@@ -47,7 +51,6 @@ class ThirdActivity : AppCompatActivity() {
         val cityNames = intent.getStringArrayExtra("cityNames") ?: arrayOf()
         val coordX = intent.getIntArrayExtra("coordX") ?: intArrayOf()
         val coordY = intent.getIntArrayExtra("coordY") ?: intArrayOf()
-
         // Reconstruct the map from the arrays
         cities = cityNames.zip(coordX.zip(coordY)) { name, coords ->
             name to Pair(coords.first, coords.second)
@@ -171,6 +174,10 @@ class ThirdActivity : AppCompatActivity() {
                             putExtra("BEST_PATH_TEXT", bestPathText)
                             putExtra("DISTANCE_BEFORE_TEXT", distanceBeforeText)
                             putExtra("BEST_DISTANCE_TEXT", bestDistanceText)
+                            putExtra("SELECTED_STATE_NAME", selectedStateName)
+                            Log.d("MyActivity", "Using state name3: $selectedStateName")
+
+
                         }
                         startActivity(intent)
                     }
@@ -225,6 +232,7 @@ class ThirdActivity : AppCompatActivity() {
                 } else {
                     // Handle successful execution, e.g., navigating to a results activity
                     val intent = Intent(this@ThirdActivity, FourthActivity::class.java).apply {
+
                         putExtra("IMAGE_PATH", it.outputImagePath)
                         putExtra("BEST_PATH_TEXT", it.bestPathText)
                         putExtra("DISTANCE_BEFORE_TEXT", it.distanceBeforeText)

@@ -2,6 +2,7 @@ package com.chaquo.myapplication
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -23,6 +24,8 @@ class SecondActivity : AppCompatActivity() {
         setContentView(R.layout.activity_second)
 
         val selectedStateName = intent.getStringExtra("SELECTED_STATE_NAME")
+        Log.d("MyActivity", "Using state name: $selectedStateName")
+
         val cities = getCitiesForState(selectedStateName ?: "")
 
         listView = findViewById(R.id.listView)
@@ -79,8 +82,6 @@ class SecondActivity : AppCompatActivity() {
                     apply()
                 }
                 val intent = Intent(this, ThirdActivity::class.java)
-
-// Assuming 'cities' is a Map<String, Pair<Int, Int>>
                 val filteredCities = cities.filterKeys { it != selectedCity }
                 val cityNames = filteredCities.keys.toTypedArray()
                 val coordX = filteredCities.values.map { it.first }.toIntArray()
@@ -89,6 +90,9 @@ class SecondActivity : AppCompatActivity() {
                 intent.putExtra("cityNames", cityNames)
                 intent.putExtra("coordX", coordX)
                 intent.putExtra("coordY", coordY)
+                intent.putExtra("SELECTED_STATE_NAME", selectedStateName)
+                Log.d("MyActivity", "Using state name1: $selectedStateName")
+
 
                 startActivity(intent)
             }

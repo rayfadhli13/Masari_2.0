@@ -24,13 +24,31 @@ private fun createLabeledText(label: String, content: String): SpannableString {
 }
 class FourthActivity : AppCompatActivity() {
 
-    private fun overlayImages(background: Bitmap, overlay: Bitmap): Bitmap {
+    private fun overlayImages(background: Bitmap, overlay: Bitmap, scale: Float = 1.0f): Bitmap {
+        // Create a new image with the same size as the background
         val combinedImage = Bitmap.createBitmap(background.width, background.height, background.config)
         val canvas = Canvas(combinedImage)
         canvas.drawBitmap(background, 0f, 0f, null)
-        val overlayX = (background.width - overlay.width) / 2f // Center horizontally
-        val overlayY = (background.height - overlay.height) / 2f // Center vertically
-        canvas.drawBitmap(overlay, overlayX, overlayY, null)
+
+        // Calculate the scaling factor to maintain the overlay's aspect ratio
+        val scaleFactor = Math.min(
+            background.width.toFloat() / overlay.width,
+            background.height.toFloat() / overlay.height
+        )* scale
+        // Calculate the new size of the overlay
+        val newOverlayWidth = (overlay.width * scaleFactor).toInt()
+        val newOverlayHeight = (overlay.height * scaleFactor).toInt()
+
+        // Create a scaled version of the overlay
+        val scaledOverlay = Bitmap.createScaledBitmap(overlay, newOverlayWidth, newOverlayHeight, true)
+
+        // Calculate the position of the overlay to center it on the background
+        val overlayX = (background.width - scaledOverlay.width) / 2f
+        val overlayY = (background.height - scaledOverlay.height) / 2f
+
+        // Draw the scaled overlay on the canvas
+        canvas.drawBitmap(scaledOverlay, overlayX, overlayY, null)
+
         return combinedImage
     }
 
@@ -40,37 +58,25 @@ class FourthActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         val selectedStateName = intent.getStringExtra("SELECTED_STATE_NAME") ?: "DefaultState"
-        Log.d("FourthActivity", "Selected state name4: $selectedStateName")
+        Log.d("FourthActivity", "Selected state name: $selectedStateName")
 
         val stateImageResId = when (selectedStateName) {
-            "Mubarak Al-Kabeer" -> R.drawable.mubark // Replace with actual drawable resources
+            "Mubarak Al-Kabeer" -> R.drawable.mubark
             "Al-Ahmadi" -> R.drawable.ahmadi
             "Al-Jahra" -> R.drawable.algahra
-            // Add other states as needed
-            else -> R.drawable.bg_logo // Default image or error state
+            else -> R.drawable.bg_logo
         }
 
         val imageView = findViewById<ImageView>(R.id.imageView)
         val stateImageBitmap = BitmapFactory.decodeResource(resources, stateImageResId)
-
         val imagePath = intent.getStringExtra("IMAGE_PATH")
-        if (imagePath != null) {
-            val imgFile = File(imagePath)
+
+        imagePath?.let {
+            val imgFile = File(it)
             if (imgFile.exists()) {
-                val plotBitmapOriginal = BitmapFactory.decodeFile(imgFile.absolutePath)
-
-                val scaleFactor = 3.5f // Adjust this factor to scale up or down
-                val plotBitmapScaled = Bitmap.createScaledBitmap(
-                    plotBitmapOriginal,
-                    (plotBitmapOriginal.width * scaleFactor).toInt(),
-                    (plotBitmapOriginal.height * scaleFactor).toInt(),
-                    true
-                )
-
-                // Now overlay the plot image on the state image
-                val combinedImage = overlayImages(stateImageBitmap, plotBitmapScaled)
-
-                // And set the combined image on the ImageView
+                val plotBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                val scaleFactor = 1.23f // Adjust this to make the overlay plot larger or smaller
+                val combinedImage = overlayImages(stateImageBitmap, plotBitmap, scaleFactor)
                 imageView.setImageBitmap(combinedImage)
             }
             val bestPathText = intent.getStringExtra("BEST_PATH_TEXT") ?: "Best Path: Not available"

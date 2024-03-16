@@ -129,7 +129,7 @@ class SecondActivity : AppCompatActivity() {
             "Al-Fahaheel" to Pair(11, 3),
             "Al-Sabahiya" to Pair(3, 17),
             "South Al-Sabahiya" to Pair(3, 1),
-            "Al-Ahmadi City" to Pair(-13, 9),
+            "Al-Ahmadi City" to Pair(-12, 8),
             "North Al-Shu'aiba" to Pair(8, -9),
             "South Al-Shu'aiba" to Pair(8, -21),
             "Abdullah Port" to Pair(5, -42)

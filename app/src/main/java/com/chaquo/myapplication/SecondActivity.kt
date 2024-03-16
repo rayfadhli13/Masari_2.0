@@ -102,23 +102,61 @@ class SecondActivity : AppCompatActivity() {
     private fun getCitiesForState(state: String): Map<String, Pair<Int, Int>> {
         // Define maps of cities for each state
         val state1Cities = mapOf(
-            "Kabd" to Pair(0, -2),
-            "Abraq Khaitan" to Pair(3, -3),
-            "Al-Arthieya" to Pair(5, -2)
-            // Add more cities that belong to State1
+            "Sabah Al-Salem" to Pair(-4, 20),
+            "Al-Misela" to Pair(11, 10),
+            "Al-Adan" to Pair(-3, 5),
+            "Al-Wista" to Pair(-22, 5),
+            "Sabhan" to Pair(-39, 6),
+            "Al-Funaites" to Pair(14, -3),
+            "Al-Qusour" to Pair(-1, -7),
+            "Abu Futaira" to Pair(18, -19),
+            "Al-Qurain" to Pair(1, -16),
+            "Mubarak Al-Kabeer" to Pair(3, -27),
+            "South Al-Wista" to Pair(-23, -26)
         )
         val state2Cities = mapOf(
-            "Al-Shamiya" to Pair(-6, -5),
-            "Al-Shuwaikh" to Pair(-2, -3),
-            "Al-Sulaibikhat" to Pair(1, -5)
-            // Add more cities that belong to State2
+            "Al-Fintas" to Pair(9, 48),
+            "Al-Aqeila" to Pair(2, 49),
+            "Jaber Al-Ali" to Pair(-6, 47),
+            "Al-Dhaher" to Pair(-11, 43),
+            "Al-Miqwa'" to Pair(-20, 33),
+            "Al-Mahbula" to Pair(10, 36),
+            "Al-Riqqa" to Pair(3, 37),
+            "Hadiya" to Pair(-2, 35),
+            "Abu Halifa" to Pair(11, 26),
+            "Fahad Al-Ahmad" to Pair(3, 26),
+            "Al-Mangaf" to Pair(11, 16),
+            "Al-Fahaheel" to Pair(11, 3),
+            "Al-Sabahiya" to Pair(3, 17),
+            "South Al-Sabahiya" to Pair(3, 1),
+            "Al-Ahmadi City" to Pair(-13, 9),
+            "North Al-Shu'aiba" to Pair(8, -9),
+            "South Al-Shu'aiba" to Pair(8, -21),
+            "Abdullah Port" to Pair(5, -42)
         )
-        // Add more states and their cities as needed
-
+        val state3Cities = mapOf(
+            "Mu'skrat Al-Jahra" to Pair(-12, 8),
+            "West Al-Jahra" to Pair(-43, 11),
+            "Al-Jahra" to Pair(-33, 7),
+            "Al-Waha" to Pair(-40, 4),
+            "Al-Qasr" to Pair(-25, 5),
+            "Al-Naeem" to Pair(-24, -1),
+            "Taima" to Pair(-30, -2),
+            "Al-Oyoun" to Pair(-40, -2),
+            "Al-Nasseem" to Pair(-31, -7),
+            "Al-Jahra Industrial" to Pair(-39, -13),
+            "Amghara" to Pair(-4, -11),
+            "Maqbara" to Pair(30,-17),
+            "Al-Sulaibiya" to Pair(30, -24),
+            "Al-Sulaibiya Agricultural" to Pair(20, -28),
+            "Al-Sulaibiya Industrial 1" to Pair(38, -25),
+            "Al-Sulaibiya Industrial 2" to Pair(42, -34)
+        )
         // Return the map of cities based on the selected state
         return when (state) {
-            "State1" -> state1Cities
-            "State2" -> state2Cities
+            "Mubarak Al-Kabeer" -> state1Cities
+            "Al-Ahmadi" -> state2Cities
+            "Al-Jahra" -> state3Cities
             // Add more cases for additional states
             else -> emptyMap() // Return an empty map if the state is not recognized
         }

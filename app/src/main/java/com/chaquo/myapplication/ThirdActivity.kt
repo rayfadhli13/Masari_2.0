@@ -27,7 +27,7 @@ import java.util.Date
 import java.util.Locale
 
 class ThirdActivity : AppCompatActivity() {
-    private val maxSelections = 30
+    private val maxSelections = 99
     private lateinit var listViewCities: ListView
     private lateinit var btnConfirm: Button
     private lateinit var progressBar: ProgressBar

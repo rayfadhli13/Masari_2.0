@@ -36,12 +36,8 @@ def draw_arrow_between_points(start, end, ax, zorder=2):
 
 def plotCitiesAndPath(C, N, Order):
     print("Start of plotCitiesAndPath function call")
-    fig, ax = plt.subplots(figsize=(10, 8))
-    ax.axis('off')
+    fig, ax = plt.subplots(figsize=(10, 9))
 
-    # Remove the ticks (the numbers on the axis)
-    ax.set_xticks([])
-    ax.set_yticks([])
 
     # Plot the cities
     for i, (x, y) in enumerate(C):
@@ -59,12 +55,22 @@ def plotCitiesAndPath(C, N, Order):
     # Optionally, draw an arrow from the last to the first city to complete the loop
     draw_arrow_between_points(np.array(C[Order[-1]]), np.array(C[Order[0]]), ax, zorder=2)
 
-    # Adjust plot limits and enable grid
-    maxVal = max(max(abs(x), abs(y)) for x, y in C)
-    ax.set_xlim(-maxVal - 1, maxVal + 1)
-    ax.set_ylim(-maxVal - 1, maxVal + 1)
+    # Set plot limits to always show a 50x50 grid
+    ax.set_xlim(-50, 50)
+    ax.set_ylim(-50, 50)
 
+    # Set x and y ticks to mark every 10 units
+    ax.set_xticks(np.arange(-50, 51, 1))
+    ax.set_xticklabels([])
+    ax.set_yticks(np.arange(-50, 51, 1))
+    ax.set_yticklabels([])
 
+    # Enable grid
+    # ax.grid(True, which='both', linestyle='--', linewidth=0.5, zorder=0)
+    # Remove the outline/spines
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.tick_params(axis='both', which='both', length=0)
     print("End of plotCitiesAndPath function call")
 
 

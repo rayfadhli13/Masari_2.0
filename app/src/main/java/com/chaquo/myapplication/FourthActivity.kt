@@ -43,8 +43,9 @@ class FourthActivity : AppCompatActivity() {
         Log.d("FourthActivity", "Selected state name4: $selectedStateName")
 
         val stateImageResId = when (selectedStateName) {
-            "State1" -> R.drawable.mubark // Replace with actual drawable resources
-            "State2" -> R.drawable.ahmadi
+            "Mubarak Al-Kabeer" -> R.drawable.mubark // Replace with actual drawable resources
+            "Al-Ahmadi" -> R.drawable.ahmadi
+            "Al-Jahra" -> R.drawable.algahra
             // Add other states as needed
             else -> R.drawable.bg_logo // Default image or error state
         }

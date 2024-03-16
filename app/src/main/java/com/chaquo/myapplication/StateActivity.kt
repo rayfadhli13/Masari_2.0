@@ -53,8 +53,9 @@ class StateActivity : AppCompatActivity() {
         listView = findViewById(R.id.listView)
 
         val states = listOf(
-            State("State1"),
-            State("State2")
+            State("Mubarak Al-Kabeer"),
+            State("Al-Ahmadi"),
+            State("Al-Jahra")
             // Add more states as needed.
         )
 
@@ -69,7 +70,7 @@ class StateActivity : AppCompatActivity() {
                     putExtra("SELECTED_STATE_NAME", state.name)
                 }
                 startActivity(intent)
-            } ?: Toast.makeText(this, "Please select a state.", Toast.LENGTH_LONG).show()
+            } ?: Toast.makeText(this, "Please select a government.", Toast.LENGTH_LONG).show()
         }
     }
 }
